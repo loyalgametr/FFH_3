@@ -29,7 +29,7 @@ public class Arms {
         }
 
         void use() {
-
+            System.out.println(stat1.Dexterity);
             if (durability<=0){number--;durability = 10;}
 
             int damage = 10;
@@ -156,10 +156,13 @@ public class Arms {
             if (number > 0) {
 
                 int randDamage = rand.nextInt(damage);
-                int critRand = rand.nextInt(20);
+                // a debuff for wizard
+                int critRand = rand.nextInt(35);
+                System.out.println(critRand);
+                System.out.println(stat1.Dexterity);
                 durability--;
-
-                int randRapid = rand.nextInt(20);
+                // a debuff for wizard
+                int randRapid = rand.nextInt(30);
                 if (randRapid<rapid){
                     damage *= 2;
                     randDamage *= 2;
@@ -173,7 +176,7 @@ public class Arms {
                 if (durability >= 0) {
 
                     if (critRand < stat1.Dexterity) {
-                        System.out.println("Critic magic attack! A black magic attack by "+2*damage + "damage");
+                        System.out.println("Critic magic attack! A black magic attack by "+2*damage + " damage");
                         instant1.decreaseHP(2 * damage);
 
                     } else {
@@ -209,7 +212,7 @@ public class Arms {
         }
 
         void use() {
-
+            System.out.println(stat1.Dexterity);
             if (durability<=0){number--;durability = 10;}
 
             int damage = 5;

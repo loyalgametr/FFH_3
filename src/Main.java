@@ -79,7 +79,7 @@ public class Main {
         System.out.println("If you want to buy armor you can write (armor)");
         Inventory inventory1 = new Inventory(apple1, torch1, sword1, axe1, bow1, wand1, instant1, stat1);
 
-        while (stat.ifAlive && stat1.ifAlive){
+        while (true){
 
             System.out.print("Player 1's hp is: ");
             stat.displayHp();
@@ -252,6 +252,16 @@ public class Main {
             System.out.println("\n");
             stat.check();
             stat1.check();
+
+            if (!stat.ifAlive){
+                stat1.upLevel();
+                break;
+            }
+
+            if (!stat1.ifAlive){
+                stat.upLevel();
+                break;
+            }
 
         }
     }
