@@ -1,18 +1,17 @@
 import java.util.Random;
 
-public class Arms {
+public abstract class Arms {
 
     static Stat stat;
     static Instant instant;
     EnumChamps e;
+    int Damage ;
+    void use(){}
 
-    Arms(Stat stat, Instant instant, EnumChamps e) {
-        Arms.stat = stat;
-        Arms.instant = instant;
-        this.e = e;
+    Arms() {
     }
 
-    public static class Sword{
+    public static class Sword extends Arms {
         Random rand = new Random();
 
         int number = 1;
@@ -24,15 +23,16 @@ public class Arms {
 
         Stat stat1;
         Sword(Stat stat1, Instant instant1) {
+            super();
             this.stat1 = stat1;
             this.instant1 = instant1;
         }
-
+        int Damage = 10;
         void use() {
             System.out.println(stat1.Dexterity);
             if (durability<=0){number--;durability = 10;}
 
-            int damage = 10;
+            int damage = Damage;
 
             if (number > 0) {
                 int critRand = rand.nextInt(20);
@@ -78,7 +78,7 @@ public class Arms {
         }
     }
 
-    public static class Bow{
+    public static class Bow extends Arms {
         Random rand = new Random();
         int number = 1;
         final int rapid = 15;
@@ -91,10 +91,10 @@ public class Arms {
             this.stat1 = stat1;
             this.instant1 = instant1;
         }
-
+        int Damage = 7;
         void use() {
             if (durability<=0){number--;durability = 10;}
-            int damage = 7;
+            int damage = Damage;
 
             if (number > 0) {
 
@@ -136,14 +136,14 @@ public class Arms {
         }
     }
 
-    public static class Wand{
+    public static class Wand extends Arms {
         int number = 1;
         final int rapid = 4;
 
         int durability = 1000;
         Random rand = new Random();
         Instant instant1;
-
+        int Damage = 25;
         Stat stat1;
         Wand(Stat stat1, Instant instant1) {
             this.stat1 = stat1;
@@ -151,7 +151,7 @@ public class Arms {
         }
         void use(){
             if (durability<=0){number--;durability = 10;}
-            int damage = 25;
+            int damage = Damage;
 
             if (number > 0) {
 
@@ -196,13 +196,13 @@ public class Arms {
         }
     }
 
-    public static class Axe{
+    public static class Axe extends Arms {
         Random rand = new Random();
         final int rapid = 12;
 
         int durability = 9;
         int number = 1;
-
+        int Damage = 5;
         Instant instant1;
 
         Stat stat1;
@@ -215,7 +215,7 @@ public class Arms {
             System.out.println(stat1.Dexterity);
             if (durability<=0){number--;durability = 10;}
 
-            int damage = 5;
+            int damage = Damage;
 
             if (number > 0) {
                 int critRand = rand.nextInt(20);

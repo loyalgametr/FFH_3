@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 public class Main {
     public static void main(String[] args) throws InterruptedException {
 
+        // choosing for player 1
         Scanner scan = new Scanner(System.in);
 
         System.out.println("Player 1, please enter what you want to choose : \ndwarf/wizard/elf/troll");
@@ -25,6 +26,7 @@ public class Main {
             chose = 't';
         }else{e = EnumChamps.Wizard;chose='w';}
 
+        // choosing for player 2
         char chose2;
         System.out.println("Player 2, please enter what you want to choose : \ndwarf/wizard/elf/troll");
 
@@ -44,7 +46,7 @@ public class Main {
             chose2 = 't';
         }else{e1 = EnumChamps.Wizard;chose2 = 'w';}
 
-
+        // class initializations for player 1 and player 2
         Stat stat1 = new Stat(e1);
         Instant instant1 = new Instant(stat1);
         Stat stat = new Stat(e);
@@ -65,20 +67,63 @@ public class Main {
         Arms.Axe axe1 = new Arms.Axe(stat, instant);
 
 
-
-        switch (chose2) {
-            case 't' -> axe1.number = 1;
-            case 'w' -> wand1.number = 1;
-            case 'd' -> sword1.number = 1;
-            case 'e' -> bow1.number = 1;
-        }
-
         Inventory.Apple apple1 = new Inventory.Apple();
         Inventory.Torch torch1 = new Inventory.Torch();
         System.out.println("If you want to buy something you can write (buy)");
         System.out.println("If you want to buy armor you can write (armor)");
         Inventory inventory1 = new Inventory(apple1, torch1, sword1, axe1, bow1, wand1, instant1, stat1);
 
+        final int PLAYER = 1;
+        Player<Arms, Inventory> player = null;
+
+        Arms arms = null;
+
+        if (Objects.equals(chose, 'd')){
+            player = new Player<>(sword, inventory);
+
+            arms = sword;
+        }else if (Objects.equals(chose, 'e')){
+            player = new Player<>(bow, inventory);
+
+            arms = bow;
+            System.out.println(bow.Damage);
+        }else if (Objects.equals(chose, 'w')){
+            player = new Player<>(wand, inventory);
+
+            arms = wand;
+        }else if (Objects.equals(chose, 't')){
+            player = new Player<>(axe, inventory);
+
+            arms = axe;
+        }
+        assert player != null;
+        player.giveStatPoints(stat, PLAYER, arms);
+
+        final int PLAYER1 = 2;
+        Player<Arms, Inventory> player1 = null;
+
+        Arms arms1 = null;
+        if (Objects.equals(chose2, 'd')){
+            player1 = new Player<>(sword1, inventory1);
+
+            arms1 = sword1;
+        }else if (Objects.equals(chose2, 'e')){
+            player1 = new Player<>(bow1, inventory1);
+
+            arms1 = bow1;
+        }else if (Objects.equals(chose2, 'w')){
+            player1 = new Player<>(wand1, inventory1);
+
+            arms1 = wand1;
+        }else if (Objects.equals(chose2, 't')){
+            player1 = new Player<>(axe1, inventory1);
+
+            arms1 = axe1;
+        }
+        assert player1 != null;
+        player1.giveStatPoints(stat1, PLAYER1, arms1);
+
+        // running the game
         while (true){
 
             System.out.print("Player 1's hp is: ");
@@ -89,134 +134,19 @@ public class Main {
             TimeUnit.SECONDS.sleep(1);
 
             if (!stat.frozen){
-                System.out.println("\n");
-                System.out.println("\t----Player 1's turn ----");
-                System.out.println("\tPlayer 1, you can write attack(a), defence(d), use torch(t), eat apple(e)" +
-                        "\nfroze enemy(f), burn enemy(b), buy guns and other stuff (buy), buy armor(armor)");
-                String str2 = scan.nextLine();
 
-
-                if (Objects.equals(str2, "buy")) {
-                    inventory.buy();
-                    System.out.println("\tPlayer 1, you can write attack(a), defence(d), use torch(t), eat apple(e)" +
-                            "\nfroze enemy(f), burn enemy(b), buy guns and other stuff (buy), buy armor(armor)");
-                    str2 = scan.nextLine();
-                }
-
-                if (Objects.equals(str2, "armor")) {
-                    inventory.wear();
-                    System.out.println("\tPlayer 1, you can write attack(a), defence(d), use torch(t), eat apple(e)" +
-                            "\nfroze enemy(f), burn enemy(b), buy guns and other stuff (buy), buy armor(armor)");
-                    str2 = scan.nextLine();
-                }if (Objects.equals(str2, "t")) {
-                    torch.use();
-                    System.out.println("\tPlayer 1, you can write attack(a), defence(d), use torch(t), eat apple(e)" +
-                            "\nfroze enemy(f), burn enemy(b), buy guns and other stuff (buy), buy armor(armor)");
-                    str2 = scan.nextLine();
-                }
-
-                if (Objects.equals(str2, "buy")) {
-                    inventory.buy();
-                    System.out.println("\tPlayer 1, you can write attack(a), defence(d), use torch(t), eat apple(e)" +
-                            "\nfroze enemy(f), burn enemy(b), buy guns and other stuff (buy), buy armor(armor)");
-                    str2 = scan.nextLine();
-                }
-
-                if (Objects.equals(str2, "t")) {
-                    torch.use();
-                    System.out.println("\tPlayer 1, you can write attack(a), defence(d), use torch(t), eat apple(e)" +
-                            "\nfroze enemy(f), burn enemy(b), buy guns and other stuff (buy), buy armor(armor)");
-                    str2 = scan.nextLine();
-                }
-
-                if (Objects.equals(str2, "a")) {
-
-                    switch (chose) {
-                        case 't' -> axe.use();
-                        case 'w' -> wand.use();
-                        case 'd' ->  sword.use();
-                        case 'e' -> bow.use();
-                    }
-                    // not over yet work on here
-                } else if (Objects.equals(str2, "d")) {
-                    instant.defence();
-                } else if (Objects.equals(str2, "e")) {
-                    apple.eat();
-                }  else if (Objects.equals(str2, "f")) {
-                    instant1.froze();
-                }else if (Objects.equals(str2, "b")) {
-                    instant1.burn();
-                }
+                player.turn(PLAYER, inventory, instant);
                 stat1.def = false;
+
             }
 
             TimeUnit.SECONDS.sleep(1);
 
             if(!stat1.frozen){
-                System.out.println("\n");
-                System.out.println("\t----Player 2's turn ----");
-                System.out.println("Player 2, you can write attack(a), defence(d), use torch(t), eat apple(e)" +
-                        "froze enemy(f), burn enemy(b)");
-                String str3 = scan.nextLine();
 
-                if (Objects.equals(str3, "buy")) {
-                    inventory1.buy();
-                    System.out.println("\tPlayer 1, you can write attack(a), defence(d), use torch(t), eat apple(e)" +
-                            "\nfroze enemy(f), burn enemy(b), buy guns and other stuff (buy), buy armor(armor)");
-                    str3 = scan.nextLine();
-                }
-
-                if (Objects.equals(str3, "armor")) {
-                    inventory1.wear();
-                    System.out.println("\tPlayer 1, you can write attack(a), defence(d), use torch(t), eat apple(e)" +
-                            "\nfroze enemy(f), burn enemy(b), buy guns and other stuff (buy), buy armor(armor)");
-                    str3 = scan.nextLine();
-                }if (Objects.equals(str3, "t")) {
-                    torch1.use();
-                    System.out.println("\tPlayer 1, you can write attack(a), defence(d), use torch(t), eat apple(e)" +
-                            "\nfroze enemy(f), burn enemy(b), buy guns and other stuff (buy), buy armor(armor)");
-                    str3 = scan.nextLine();
-                }
-
-                if (Objects.equals(str3, "buy")) {
-                    inventory1.buy();
-                    System.out.println("\tPlayer 1, you can write attack(a), defence(d), use torch(t), eat apple(e)" +
-                            "\nfroze enemy(f), burn enemy(b), buy guns and other stuff (buy), buy armor(armor)");
-                    str3 = scan.nextLine();
-                }
-
-                if (Objects.equals(str3, "t")) {
-                    torch1.use();
-                    System.out.println("\tPlayer 1, you can write attack(a), defence(d), use torch(t), eat apple(e)" +
-                            "\nfroze enemy(f), burn enemy(b), buy guns and other stuff (buy), buy armor(armor)");
-                    str3 = scan.nextLine();
-                }
-
-                if (Objects.equals(str3, "a")) {
-
-                    switch (chose2) {
-                        case 't' -> axe1.use();
-                        case 'w' -> wand1.use();
-                        case 'd' ->  sword1.use();
-                        case 'e' -> bow1.use();
-                    }
-
-                } else if (Objects.equals(str3, "d")) {
-                    instant1.defence();
-                } else if (Objects.equals(str3, "t")) {
-                    torch1.use();
-                } else if (Objects.equals(str3, "e")) {
-                    apple1.eat();
-                } else if (Objects.equals(str3, "buy")) {
-                    inventory1.buy();
-                    inventory1.wear();
-                } else if (Objects.equals(str3, "f")) {
-                    instant.froze();
-                }else if (Objects.equals(str3, "b")) {
-                    instant.burn();
-                }
-
+                player1.turn(PLAYER1, inventory1, instant1);
                 stat.def = false;
+
             }
             stat1.frozen = false;
             stat.frozen = false;
